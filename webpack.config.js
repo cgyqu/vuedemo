@@ -1,13 +1,15 @@
 var webpack = require("webpack")
 var UglifyJSPlugin = require('uglifyjs-webpack-plugin')
 var path = require('path')
+var HtmlWebpackPlugin = require('html-webpack-plugin');
+var CleanWebpackPlugin = require('clean-webpack-plugin')
 
 module.exports = {
-  entry: "./app/main.js",//已多次提及的唯一入口文件
+  entry: "./app/main.js",//唯一入口文件
   output: {
     path: __dirname + "/dist",//打包后的文件存放的地方
-    publicPath: '/',
-    filename: "bundle.js"//打包后输出文件的文件名
+    publicPath:  "./dist",
+    filename: "bundle-[hash].js"//打包后输出文件的文件名
   },
   devServer: {
     historyApiFallback: true,
@@ -45,6 +47,12 @@ module.exports = {
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
-    new UglifyJSPlugin()
+    new UglifyJSPlugin(),
+    new HtmlWebpackPlugin({
+      template: __dirname + "/app/index.html",
+      filename: __dirname + '/index.html',
+      inject: true
+    }),
+    new CleanWebpackPlugin(['dist'])
   ]
 }
